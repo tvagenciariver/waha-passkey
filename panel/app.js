@@ -70,6 +70,12 @@ class WahaAPI {
     return this.request('/api/sessions');
   }
 
+  async getSession(name) {
+    // Some WAHA versions don't have a single GET, so we filter from all
+    const all = await this.getSessions();
+    return all.find(s => s.name === name) || null;
+  }
+
   async createSession(name, engine = 'GOWS', start = true) {
     return this.request('/api/sessions', {
       method: 'POST',
@@ -524,6 +530,7 @@ class SessionManager {
     this.qrSessionName = null;
     this.qrCountdown = DEFAULT_CONFIG.qrRefreshInterval;
     this.isConnected = false;
+    this.failCount = 0;
     this.pendingConfirm = null;
     this.isSigningPasskey = false; // Prevent overlapping signing attempts
   }
@@ -601,6 +608,7 @@ class SessionManager {
         this.ui.setConnectionStatus('connected');
         this.log.add('success', 'Reconnected to WAHA server');
       }
+      this.failCount = 0;
 
       // Update session count in stats
       const el = document.getElementById('stat-sessions');
@@ -628,7 +636,8 @@ class SessionManager {
         }
       }
     } catch (err) {
-      if (this.isConnected) {
+      this.failCount++;
+      if (this.isConnected && this.failCount > 2) {
         this.isConnected = false;
         this.ui.setConnectionStatus('disconnected');
         this.ui.setServerOffline();
@@ -747,16 +756,31 @@ class SessionManager {
     this.isSigningPasskey = false;
 
     this.qrCountdownTimer = setInterval(async () => {
-      // While polling for QR, also check if a passkey challenge is required
+      // 1. Fast check for Passkey
       if (!this.isSigningPasskey) {
         try {
           const challenge = await this.api.getPasskeyChallenge(name);
           if (challenge && challenge.challenge) {
             this.handlePasskeyChallenge(name, challenge);
           }
-        } catch (err) {
-          // Ignore 404s or errors if challenge is not ready
-        }
+        } catch (err) {}
+      }
+
+      // 2. Explicit connection check every 2 seconds
+      if (this.qrCountdown % 2 === 0) {
+        try {
+          const session = await this.api.getSession(name);
+          if (session && String(session.status).toUpperCase() === 'WORKING') {
+            this.ui.setPasskeyStatus('✓ Connected successfully!', true);
+            this.stopQRPolling();
+            this.log.add('success', `Session "${name}" is now WORKING`);
+            this.ui.toast('success', 'Session Connected', `${name} linked successfully!`);
+            setTimeout(() => this.ui.closeModal('modal-qr'), 2000);
+            this.qrSessionName = null;
+            this.loadSessions(true);
+            return;
+          }
+        } catch (err) {}
       }
 
       this.qrCountdown--;
