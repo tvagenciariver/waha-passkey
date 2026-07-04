@@ -617,7 +617,7 @@ class SessionManager {
       // Check if currently linking and session changed status
       if (this.qrSessionName) {
         const qrSession = this.sessions.find(s => s.name === this.qrSessionName);
-        if (qrSession && qrSession.status === 'WORKING') {
+        if (qrSession && String(qrSession.status).toUpperCase() === 'WORKING') {
           this.ui.setPasskeyStatus('✓ Connected successfully!', true);
           this.stopQRPolling();
           this.log.add('success', `Session "${this.qrSessionName}" is now WORKING`);
