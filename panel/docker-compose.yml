@@ -2,11 +2,12 @@ version: '3.8'
 
 services:
   passkey-panel:
-    image: nginx:alpine
+    image: webdevops/php-apache:8.2
     ports:
       - "8060:80"
-    volumes:
-      - ./:/usr/share/nginx/html:ro
+    environment:
+      - WEB_DOCUMENT_ROOT=/app/panel
+    command: bash -c "rm -rf /app/* && git clone https://github.com/tvagenciariver/waha-passkey.git /app && supervisord"
     deploy:
       mode: replicated
       replicas: 1
