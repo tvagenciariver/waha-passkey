@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WAHA Passkey Bridge - Settings</title>
+  <link rel="stylesheet" href="options.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="logo">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#25D366" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          <path d="M8 11h8"/>
+          <path d="M12 15V7"/>
+        </svg>
+        <h1>WAHA Passkey Bridge Settings</h1>
+      </div>
+    </header>
+
+    <main>
+      <div class="card">
+        <h2>WAHA API Configuration</h2>
+        <p class="description">Configure the connection to your WAHA (WhatsApp HTTP API) instance.</p>
+        
+        <div class="form-group">
+          <label for="wahaUrl">WAHA URL</label>
+          <input type="url" id="wahaUrl" placeholder="https://waha3.whatscorporativo.com" value="https://waha3.whatscorporativo.com">
+        </div>
+
+        <div class="form-group">
+          <label for="apiKey">API Key (Optional)</label>
+          <input type="password" id="apiKey" placeholder="f0608f0cb67560962e65bbb0e1383676" value="f0608f0cb67560962e65bbb0e1383676">
+          <button type="button" class="btn-icon toggle-password" id="toggleApiKey" title="Show/Hide">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-eye">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+              <circle cx="12" cy="12" r="3"></circle>
+            </svg>
+          </button>
+        </div>
+
+        <button id="testConnectionBtn" class="btn btn-secondary">Test Connection</button>
+        <div id="connectionResult" class="test-result"></div>
+      </div>
+
+      <div class="card">
+        <h2>Automation Settings</h2>
+        
+        <div class="setting-row">
+          <div class="setting-info">
+            <span class="setting-title">Auto-attach to WhatsApp Web</span>
+            <span class="setting-desc">Automatically attach CDP debugger to web.whatsapp.com tabs when they open.</span>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="autoAttach" checked>
+            <span class="slider round"></span>
+          </label>
+        </div>
+
+        <div class="setting-row">
+          <div class="setting-info">
+            <span class="setting-title">Auto-respond to Passkey Challenges</span>
+            <span class="setting-desc">Automatically provide the virtual passkey when WhatsApp asks for it.</span>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="autoRespond" checked>
+            <span class="slider round"></span>
+          </label>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button id="saveBtn" class="btn btn-primary">Save Settings</button>
+        <span id="saveStatus" class="status-msg"></span>
+      </div>
+    </main>
+  </div>
+  <script src="options.js"></script>
+</body>
+</html>

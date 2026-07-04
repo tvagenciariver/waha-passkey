@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <linearGradient id="shieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2EE676"/>
+      <stop offset="50%" stop-color="#25D366"/>
+      <stop offset="100%" stop-color="#128C7E"/>
+    </linearGradient>
+    <linearGradient id="keyGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#25D366"/>
+      <stop offset="100%" stop-color="#2EE676"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="2" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="innerShadow">
+      <feOffset dx="0" dy="2"/>
+      <feGaussianBlur stdDeviation="2"/>
+      <feComposite operator="out" in="SourceGraphic"/>
+      <feComponentTransfer><feFuncA type="linear" slope="0.3"/></feComponentTransfer>
+      <feComposite operator="over" in="SourceGraphic"/>
+    </filter>
+  </defs>
+  <!-- Shield outline -->
+  <path d="M64 8L16 32v24c0 30.7 20.5 59.4 48 64 27.5-4.6 48-33.3 48-64V32L64 8z" fill="url(#shieldGrad)" opacity="0.95" filter="url(#innerShadow)"/>
+  <!-- Shield inner -->
+  <path d="M64 16L24 36v20c0 27.2 17.8 52.5 40 56 22.2-3.5 40-28.8 40-56V36L64 16z" fill="#1a1a2e"/>
+  <!-- Subtle grid pattern -->
+  <path d="M64 16L24 36v20c0 27.2 17.8 52.5 40 56 22.2-3.5 40-28.8 40-56V36L64 16z" fill="url(#shieldGrad)" opacity="0.05"/>
+  <!-- Key icon -->
+  <g filter="url(#glow)">
+    <!-- Key ring -->
+    <circle cx="50" cy="50" r="12" fill="none" stroke="url(#keyGrad)" stroke-width="5"/>
+    <circle cx="50" cy="50" r="5" fill="none" stroke="#25D366" stroke-width="2" opacity="0.5"/>
+    <!-- Key shaft -->
+    <rect x="61" y="47.5" width="30" height="5" rx="2.5" fill="url(#keyGrad)"/>
+    <!-- Key teeth -->
+    <rect x="83" y="47.5" width="4" height="12" rx="1.5" fill="#25D366"/>
+    <rect x="76" y="47.5" width="4" height="9" rx="1.5" fill="#25D366"/>
+    <rect x="69" y="47.5" width="4" height="7" rx="1.5" fill="#25D366" opacity="0.7"/>
+  </g>
+  <!-- WAHA text -->
+  <text x="64" y="85" text-anchor="middle" fill="#25D366" font-family="system-ui" font-size="14" font-weight="bold" letter-spacing="3" opacity="0.9">WAHA</text>
+  <!-- Passkey text -->
+  <text x="64" y="98" text-anchor="middle" fill="#25D366" font-family="system-ui" font-size="8" font-weight="600" letter-spacing="5" opacity="0.6">PASSKEY</text>
+</svg>

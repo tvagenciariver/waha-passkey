@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="WAHA Passkey Manager — Premium dashboard to manage WhatsApp sessions and passkey linking.">
+  <meta name="author" content="WAHA Passkey Manager">
+  <meta name="theme-color" content="#0a0a0f">
+  <title>WAHA Passkey Manager</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔑</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="index.css">
+</head>
+<body>
+  <!-- Toast Container -->
+  <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="header-inner">
+      <div class="header-left">
+        <div class="logo">
+          <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/>
+          </svg>
+          <h1 class="logo-text">WAHA <span class="logo-accent">Passkey</span> Manager</h1>
+        </div>
+      </div>
+      <div class="header-right">
+        <div class="connection-status" id="connection-status">
+          <span class="status-dot" id="status-dot"></span>
+          <span class="status-text" id="status-text">Connecting…</span>
+        </div>
+        <button class="icon-btn" id="btn-refresh" title="Refresh (R)" aria-label="Refresh sessions">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/>
+            <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+          </svg>
+        </button>
+        <button class="icon-btn" id="btn-settings" title="Settings" aria-label="Open settings">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="main">
+    <!-- Server Info Card -->
+    <section class="server-card glass-card" id="server-card">
+      <div class="server-card-header">
+        <div class="server-card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/>
+            <line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/>
+          </svg>
+        </div>
+        <h2 class="server-card-title">WAHA Server</h2>
+      </div>
+      <div class="server-stats" id="server-stats">
+        <div class="stat-item">
+          <span class="stat-label">Status</span>
+          <span class="stat-value" id="stat-status">
+            <span class="skeleton skeleton-text"></span>
+          </span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Version</span>
+          <span class="stat-value" id="stat-version">
+            <span class="skeleton skeleton-text"></span>
+          </span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Engine</span>
+          <span class="stat-value" id="stat-engine">
+            <span class="skeleton skeleton-text"></span>
+          </span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Sessions</span>
+          <span class="stat-value" id="stat-sessions">
+            <span class="skeleton skeleton-text"></span>
+          </span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sessions Section -->
+    <section class="sessions-section">
+      <div class="section-header">
+        <h2 class="section-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="section-icon">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+          </svg>
+          Sessions
+        </h2>
+        <button class="btn btn-primary" id="btn-new-session" title="New Session (N)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+          New Session
+        </button>
+      </div>
+      <div class="sessions-grid" id="sessions-grid">
+        <!-- Session cards rendered here -->
+        <div class="empty-state" id="empty-state" style="display:none;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="empty-icon">
+            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>
+          </svg>
+          <h3>No Sessions Found</h3>
+          <p>Create your first WhatsApp session to get started.</p>
+          <button class="btn btn-primary" id="btn-empty-new">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+            Create Session
+          </button>
+        </div>
+        <!-- Skeleton loaders -->
+        <div class="session-card skeleton-card" id="skeleton-1">
+          <div class="skeleton skeleton-title"></div>
+          <div class="skeleton skeleton-badge"></div>
+          <div class="skeleton skeleton-text"></div>
+          <div class="skeleton skeleton-actions"></div>
+        </div>
+        <div class="session-card skeleton-card" id="skeleton-2">
+          <div class="skeleton skeleton-title"></div>
+          <div class="skeleton skeleton-badge"></div>
+          <div class="skeleton skeleton-text"></div>
+          <div class="skeleton skeleton-actions"></div>
+        </div>
+        <div class="session-card skeleton-card" id="skeleton-3">
+          <div class="skeleton skeleton-title"></div>
+          <div class="skeleton skeleton-badge"></div>
+          <div class="skeleton skeleton-text"></div>
+          <div class="skeleton skeleton-actions"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Event Log -->
+    <section class="event-log-section" id="event-log-section">
+      <button class="event-log-toggle" id="event-log-toggle">
+        <div class="event-log-toggle-left">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="section-icon">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+          </svg>
+          <h2 class="section-title">Event Log</h2>
+          <span class="event-count" id="event-count">0</span>
+        </div>
+        <svg class="chevron-icon" id="event-log-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="6 9 12 15 18 9"/>
+        </svg>
+      </button>
+      <div class="event-log-body" id="event-log-body">
+        <div class="event-log-actions">
+          <button class="btn btn-ghost btn-sm" id="btn-clear-log">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+            </svg>
+            Clear
+          </button>
+          <button class="btn btn-ghost btn-sm" id="btn-export-log">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+            Export JSON
+          </button>
+        </div>
+        <div class="event-timeline" id="event-timeline">
+          <div class="event-empty">
+            <p>No events yet. Actions will be logged here.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <p class="footer-text">WAHA Passkey Manager <span class="footer-version">v1.0.0</span></p>
+      <div class="footer-links">
+        <a href="https://waha.devlike.pro/" target="_blank" rel="noopener noreferrer" class="footer-link">WAHA Docs</a>
+        <span class="footer-divider">·</span>
+        <a href="https://github.com/devlikeapro/waha" target="_blank" rel="noopener noreferrer" class="footer-link">GitHub</a>
+      </div>
+      <p class="footer-shortcuts">Shortcuts: <kbd>N</kbd> New · <kbd>R</kbd> Refresh · <kbd>Esc</kbd> Close</p>
+    </div>
+  </footer>
+
+  <!-- ===================== MODALS ===================== -->
+
+  <!-- Create Session Modal -->
+  <div class="modal-overlay" id="modal-create" aria-hidden="true">
+    <div class="modal glass-card">
+      <div class="modal-header">
+        <h3 class="modal-title">Create New Session</h3>
+        <button class="icon-btn modal-close" data-modal="modal-create" aria-label="Close modal">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+      <form class="modal-body" id="form-create-session">
+        <div class="form-group">
+          <div class="input-wrapper">
+            <input type="text" id="input-session-name" class="form-input" placeholder=" " required autocomplete="off" pattern="[a-zA-Z0-9_-]+" title="Only letters, numbers, hyphens and underscores">
+            <label for="input-session-name" class="form-label">Session Name</label>
+          </div>
+          <p class="form-hint">Only letters, numbers, hyphens and underscores allowed.</p>
+        </div>
+        <div class="form-group">
+          <div class="input-wrapper">
+            <select id="input-engine" class="form-input form-select">
+              <option value="GOWS">GOWS</option>
+              <option value="WEBJS">WEBJS</option>
+              <option value="NOWEB">NOWEB</option>
+              <option value="VENOM">VENOM</option>
+            </select>
+            <label for="input-engine" class="form-label form-label-select">Engine</label>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="toggle-label">
+            <span class="toggle-text">Auto-start session</span>
+            <div class="toggle-switch">
+              <input type="checkbox" id="input-autostart" checked>
+              <span class="toggle-slider"></span>
+            </div>
+          </label>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-ghost" data-modal="modal-create">Cancel</button>
+          <button type="submit" class="btn btn-primary">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+            Create Session
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- QR Code / Link Device Modal -->
+  <div class="modal-overlay" id="modal-qr" aria-hidden="true">
+    <div class="modal modal-lg glass-card">
+      <div class="modal-header">
+        <h3 class="modal-title" id="qr-modal-title">Link Device</h3>
+        <button class="icon-btn modal-close" data-modal="modal-qr" aria-label="Close modal">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+      <div class="modal-body qr-modal-body">
+        <div class="qr-container">
+          <div class="qr-wrapper" id="qr-wrapper">
+            <div class="qr-loading" id="qr-loading">
+              <div class="spinner"></div>
+              <p>Loading QR Code…</p>
+            </div>
+            <img id="qr-image" class="qr-image" src="" alt="QR Code" style="display:none;">
+            <div class="qr-error" id="qr-error" style="display:none;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/>
+              </svg>
+              <p>Failed to load QR code</p>
+              <button class="btn btn-ghost btn-sm" id="btn-qr-retry">Retry</button>
+            </div>
+          </div>
+          <div class="qr-timer">
+            <div class="timer-bar" id="timer-bar"></div>
+          </div>
+          <p class="qr-timer-text">Refreshing in <span id="qr-countdown">15</span>s</p>
+        </div>
+        <div class="qr-instructions">
+          <h4 class="qr-instructions-title">How to Link</h4>
+          <ol class="steps-list">
+            <li class="step">
+              <span class="step-number">1</span>
+              <div class="step-content">
+                <strong>Open WhatsApp</strong>
+                <p>On your phone, open the WhatsApp app.</p>
+              </div>
+            </li>
+            <li class="step">
+              <span class="step-number">2</span>
+              <div class="step-content">
+                <strong>Go to Linked Devices</strong>
+                <p>Tap <strong>⋮ Menu</strong> or <strong>Settings</strong> → <strong>Linked Devices</strong>.</p>
+              </div>
+            </li>
+            <li class="step">
+              <span class="step-number">3</span>
+              <div class="step-content">
+                <strong>Scan QR Code</strong>
+                <p>Tap <strong>Link a Device</strong> and point your camera at the QR code.</p>
+              </div>
+            </li>
+            <li class="step">
+              <span class="step-number">4</span>
+              <div class="step-content">
+                <strong>Wait for Connection</strong>
+                <p>The session will automatically connect after scanning.</p>
+              </div>
+            </li>
+          </ol>
+          <div class="passkey-status" id="passkey-status">
+            <div class="passkey-indicator">
+              <span class="passkey-dot"></span>
+              <span id="passkey-text">Waiting for scan…</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Settings Modal -->
+  <div class="modal-overlay" id="modal-settings" aria-hidden="true">
+    <div class="modal glass-card">
+      <div class="modal-header">
+        <h3 class="modal-title">Settings</h3>
+        <button class="icon-btn modal-close" data-modal="modal-settings" aria-label="Close modal">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <div class="input-wrapper">
+            <input type="url" id="settings-url" class="form-input" placeholder=" " value="https://waha3.whatscorporativo.com">
+            <label for="settings-url" class="form-label">WAHA Server URL</label>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="input-wrapper">
+            <input type="password" id="settings-apikey" class="form-input" placeholder=" " value="f0608f0cb67560962e65bbb0e1383676">
+            <label for="settings-apikey" class="form-label">API Key</label>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="input-wrapper">
+            <input type="number" id="settings-refresh" class="form-input" placeholder=" " value="5" min="2" max="60">
+            <label for="settings-refresh" class="form-label">Refresh Interval (seconds)</label>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="input-wrapper">
+            <input type="text" id="settings-extension" class="form-input" placeholder=" ">
+            <label for="settings-extension" class="form-label">Passkey Extension ID</label>
+          </div>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-ghost" data-modal="modal-settings">Cancel</button>
+          <button type="button" class="btn btn-primary" id="btn-save-settings">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/>
+            </svg>
+            Save Settings
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Confirm Delete Modal -->
+  <div class="modal-overlay" id="modal-confirm" aria-hidden="true">
+    <div class="modal modal-sm glass-card">
+      <div class="modal-header">
+        <h3 class="modal-title">Confirm Action</h3>
+        <button class="icon-btn modal-close" data-modal="modal-confirm" aria-label="Close modal">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p class="confirm-message" id="confirm-message">Are you sure?</p>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-ghost" data-modal="modal-confirm">Cancel</button>
+          <button type="button" class="btn btn-danger" id="btn-confirm-action">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+            </svg>
+            Confirm
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Screenshot Modal -->
+  <div class="modal-overlay" id="modal-screenshot" aria-hidden="true">
+    <div class="modal modal-lg glass-card">
+      <div class="modal-header">
+        <h3 class="modal-title" id="screenshot-title">Session Screenshot</h3>
+        <button class="icon-btn modal-close" data-modal="modal-screenshot" aria-label="Close modal">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+      <div class="modal-body" style="text-align:center;">
+        <img id="screenshot-image" class="screenshot-image" src="" alt="Session Screenshot">
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+{
+  "manifest_version": 3,
+  "name": "WAHA Passkey Bridge",
+  "version": "1.0.0",
+  "description": "Faz a ponte entre a WAHA e a tela de Passkey do WhatsApp Web.",
+  "icons": {
+    "16": "icons/icon16.svg",
+    "32": "icons/icon32.svg",
+    "48": "icons/icon48.svg",
+    "128": "icons/icon128.svg"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "externally_connectable": {
+    "matches": ["*://*/*"]
+  },
+  "permissions": [
+    "tabs",
+    "scripting"
+  ],
+  "host_permissions": [
+    "https://web.whatsapp.com/*"
+  ]
+}
