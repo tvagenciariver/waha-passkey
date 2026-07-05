@@ -12,8 +12,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Load saved settings
   chrome.storage.local.get({
-    wahaUrl: 'https://waha3.whatscorporativo.com',
-    apiKey: 'f0608f0cb67560962e65bbb0e1383676',
+    wahaUrl: 'http://localhost:3000',
+    apiKey: 'YOUR_API_KEY_HERE',
     autoAttach: true,
     autoRespond: true
   }, (items) => {
