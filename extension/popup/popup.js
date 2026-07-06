@@ -17,6 +17,22 @@ document.addEventListener('DOMContentLoaded', () => {
     chrome.runtime.openOptionsPage();
   });
 
+  // Display Extension ID and Handle Copy
+  const extId = chrome.runtime.id;
+  const extIdDisplay = document.getElementById('extIdDisplay');
+  const copyIdBtn = document.getElementById('copyIdBtn');
+  if (extIdDisplay) extIdDisplay.textContent = extId;
+  
+  if (copyIdBtn) {
+    copyIdBtn.addEventListener('click', () => {
+      navigator.clipboard.writeText(extId).then(() => {
+        const originalHtml = copyIdBtn.innerHTML;
+        copyIdBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
+        setTimeout(() => copyIdBtn.innerHTML = originalHtml, 2000);
+      });
+    });
+  }
+
   refreshBtn.addEventListener('click', () => {
     refreshState();
   });

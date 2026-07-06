@@ -26,6 +26,15 @@
     </header>
 
     <div class="card status-card">
+      <div class="status-row" style="margin-bottom: 8px;">
+        <span>Extension ID:</span>
+        <div style="display: flex; align-items: center; gap: 6px;">
+          <code id="extIdDisplay" style="font-size: 11px; background: rgba(255,255,255,0.1); padding: 3px 6px; border-radius: 4px; user-select: all;">...</code>
+          <button id="copyIdBtn" title="Copy to clipboard" style="background:none; border:none; color:#25D366; cursor:pointer; padding:2px; display:flex;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+          </button>
+        </div>
+      </div>
       <div class="status-row">
         <span>WAHA API:</span>
         <div class="status-badge" id="wahaStatus">
