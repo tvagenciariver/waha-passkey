@@ -21,6 +21,17 @@
 
     <main>
       <div class="card">
+        <h3>Extension ID</h3>
+        <p class="description">Copy this ID to paste into the WAHA Passkey Panel settings.</p>
+        <div class="form-group">
+          <div style="display: flex; gap: 8px;">
+            <code id="extIdDisplay" style="flex: 1; padding: 10px; background: rgba(255,255,255,0.05); border-radius: 6px; font-size: 14px; color: #fff;">...</code>
+            <button type="button" id="copyIdBtn" class="btn btn-secondary" style="white-space: nowrap;">Copy ID</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
         <h2>WAHA API Configuration</h2>
         <p class="description">Configure the connection to your WAHA (WhatsApp HTTP API) instance.</p>
         

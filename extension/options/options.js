@@ -9,6 +9,24 @@ document.addEventListener('DOMContentLoaded', () => {
   const saveStatus = document.getElementById('saveStatus');
   const testConnectionBtn = document.getElementById('testConnectionBtn');
   const connectionResult = document.getElementById('connectionResult');
+  const extIdDisplay = document.getElementById('extIdDisplay');
+  const copyIdBtn = document.getElementById('copyIdBtn');
+
+  // Display Extension ID
+  const extId = chrome.runtime.id;
+  if (extIdDisplay) {
+    extIdDisplay.textContent = extId;
+  }
+  
+  if (copyIdBtn) {
+    copyIdBtn.addEventListener('click', () => {
+      navigator.clipboard.writeText(extId).then(() => {
+        const originalText = copyIdBtn.textContent;
+        copyIdBtn.textContent = 'Copied!';
+        setTimeout(() => copyIdBtn.textContent = originalText, 2000);
+      });
+    });
+  }
 
   // Load saved settings
   chrome.storage.local.get({
