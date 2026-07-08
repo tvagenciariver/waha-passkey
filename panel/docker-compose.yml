@@ -7,7 +7,7 @@ services:
       - "8060:80"
     environment:
       - WEB_DOCUMENT_ROOT=/app/panel
-      - APP_VERSION=1.10
+      - APP_VERSION=1.11
     command: bash -c "rm -rf /app/* && git clone https://github.com/tvagenciariver/waha-passkey.git /app && supervisord"
     deploy:
       mode: replicated

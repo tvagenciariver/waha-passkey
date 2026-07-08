@@ -143,6 +143,12 @@ class WahaAPI {
     });
   }
 
+  async logoutSession(name) {
+    return this.request(`/api/${encodeURIComponent(name)}/auth/logout`, {
+      method: 'POST',
+    });
+  }
+
   // ---- Screenshot ----
   async getScreenshot(name) {
     const url = `${this.baseUrl}/api/screenshot?session=${encodeURIComponent(name)}&t=${Date.now()}`;
@@ -431,6 +437,11 @@ class UIManager {
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="6" width="12" height="12" rx="1"/></svg>
             </button>
           ` : ''}
+          ${status === 'WORKING' ? `
+            <button class="btn-icon btn-warning" data-action="logout" data-session="${this.escapeAttr(session.name)}" title="Logout Device">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+            </button>
+          ` : ''}
           <button class="btn-icon btn-error" data-action="delete" data-session="${this.escapeAttr(session.name)}" title="Delete">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
           </button>
@@ -618,6 +629,7 @@ class SessionManager {
         start: (n) => this.startSession(n),
         stop: (n) => this.stopSession(n),
         restart: (n) => this.restartSession(n),
+        logout: (n) => this.logoutSession(n),
         delete: (n) => this.confirmDelete(n),
         link: (n) => this.openLinkDevice(n),
       });
@@ -696,6 +708,19 @@ class SessionManager {
     } catch (err) {
       this.log.add('error', `Failed to restart "${name}": ${err.message}`);
       this.ui.toast('error', 'Restart Failed', err.message);
+    }
+  }
+
+  async logoutSession(name) {
+    try {
+      this.log.add('info', `Logging out session "${name}"…`);
+      await this.api.logoutSession(name);
+      this.log.add('success', `Session "${name}" logged out`);
+      this.ui.toast('success', 'Session Logged Out', name);
+      await this.loadSessions();
+    } catch (err) {
+      this.log.add('error', `Failed to logout "${name}": ${err.message}`);
+      this.ui.toast('error', 'Logout Failed', err.message);
     }
   }
 

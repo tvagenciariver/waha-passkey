@@ -1,3 +1,86 @@
+<?php
+session_start();
+
+// Get credentials from environment or use default
+$envUser = getenv('APP_USER') ?: 'admin';
+$envPass = getenv('APP_PASS') ?: 'admin';
+
+// Handle Logout
+if (isset($_GET['logout'])) {
+    session_destroy();
+    header("Location: index.php");
+    exit;
+}
+
+$error = '';
+
+// Handle Login
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['username']) && isset($_POST['password'])) {
+    if ($_POST['username'] === $envUser && $_POST['password'] === $envPass) {
+        $_SESSION['logged_in'] = true;
+        header("Location: index.php");
+        exit;
+    } else {
+        $error = 'Invalid credentials';
+    }
+}
+
+// Show Login Form if not authenticated
+if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
+?>
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - WAHA Passkey Manager</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="index.css?v=1.1">
+  <style>
+    body { display: flex; align-items: center; justify-content: center; height: 100vh; background: var(--bg-primary); }
+    .login-container { width: 100%; max-width: 400px; text-align: center; }
+    .login-logo { margin-bottom: 24px; display: flex; justify-content: center; align-items: center; gap: 10px; }
+    .login-logo svg { width: 32px; height: 32px; color: var(--accent); }
+    .login-logo h1 { font-size: 24px; color: #fff; margin: 0; }
+    .login-error { color: var(--error); background: rgba(255, 71, 87, 0.1); padding: 10px; border-radius: 8px; margin-bottom: 16px; border: 1px solid rgba(255, 71, 87, 0.2); }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <div class="login-logo">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/>
+      </svg>
+      <h1>WAHA <span class="logo-accent">Passkey</span></h1>
+    </div>
+    <form class="card glass-card" method="POST" action="index.php" style="padding: 32px; text-align: left;">
+      <h2 style="margin-bottom: 24px; font-size: 18px; font-weight: 500;">Sign in to continue</h2>
+      
+      <?php if ($error): ?>
+        <div class="login-error"><?php echo htmlspecialchars($error); ?></div>
+      <?php endif; ?>
+
+      <div class="form-group">
+        <div class="input-wrapper">
+          <input type="text" id="username" name="username" class="form-input" placeholder=" " required autofocus>
+          <label for="username" class="form-label">Username</label>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="input-wrapper">
+          <input type="password" id="password" name="password" class="form-input" placeholder=" " required>
+          <label for="password" class="form-label">Password</label>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 16px;">Sign In</button>
+    </form>
+  </div>
+</body>
+</html>
+<?php
+    exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
@@ -44,6 +127,11 @@
             <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
           </svg>
         </button>
+        <a href="?logout=true" class="icon-btn" title="Logout" aria-label="Logout" style="color: var(--error);">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line>
+          </svg>
+        </a>
       </div>
     </div>
   </header>
