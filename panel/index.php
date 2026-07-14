@@ -108,7 +108,7 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
           <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/>
           </svg>
-          <h1 class="logo-text">WAHA <span class="logo-accent">Passkey</span> Manager <small style="font-size: 12px; color: var(--text-muted); opacity: 0.7;">v1.10</small></h1>
+          <h1 class="logo-text">WAHA <span class="logo-accent">Passkey</span> Manager <small style="font-size: 12px; color: var(--text-muted); opacity: 0.7;">v1.11</small></h1>
         </div>
       </div>
       <div class="header-right">
@@ -273,7 +273,7 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
   <!-- Footer -->
   <footer class="footer">
     <div class="footer-inner">
-      <p class="footer-text">WAHA Passkey Manager <span class="footer-version">v1.10</span></p>
+      <p class="footer-text">WAHA Passkey Manager <span class="footer-version">v1.11</span></p>
       <div class="footer-links">
         <a href="https://waha.devlike.pro/" target="_blank" rel="noopener noreferrer" class="footer-link">WAHA Docs</a>
         <span class="footer-divider">·</span>
